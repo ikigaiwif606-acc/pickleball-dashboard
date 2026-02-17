@@ -15,6 +15,7 @@ export interface Court {
   description: string;
   image: string;
   bookingUrl: string | null;
+  placeId?: string;
 }
 
 export interface CourtWithDistance extends Court {
