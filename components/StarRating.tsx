@@ -28,6 +28,8 @@ export default function StarRating({
             type="button"
             disabled={!interactive}
             onClick={() => interactive && onChange?.(starValue)}
+            aria-label={`${starValue} of ${maxStars} stars`}
+            aria-pressed={interactive ? filled : undefined}
             className={`${
               interactive ? "cursor-pointer hover:scale-110" : "cursor-default"
             } transition-transform ${

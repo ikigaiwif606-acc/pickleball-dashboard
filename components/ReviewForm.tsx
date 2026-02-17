@@ -22,7 +22,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 p-4 bg-gray-50 rounded-lg">
+    <form onSubmit={handleSubmit} className="mb-6 p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
       <div className="flex flex-col sm:flex-row gap-3 mb-3">
         <input
           type="text"
@@ -30,10 +30,10 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
           required
-          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          className="flex-1 px-3 py-2 border border-gray-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-700 dark:text-gray-200 dark:placeholder-gray-400"
         />
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Rating:</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">Rating:</span>
           <StarRating rating={rating} interactive onChange={setRating} />
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         rows={2}
-        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent mb-3 resize-none"
+        className="w-full px-3 py-2 border border-gray-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent mb-3 resize-none bg-white dark:bg-slate-700 dark:text-gray-200 dark:placeholder-gray-400"
       />
       <button
         type="submit"

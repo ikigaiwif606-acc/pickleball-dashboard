@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import { Court, CourtWithDistance, FilterState } from "@/lib/types";
 import { haversineDistance, isCurrentlyOpen } from "@/lib/utils";
 import { getAllReviews } from "@/lib/reviews";
+import { loadFavorites, saveFavorites } from "@/lib/favorites";
+import { defaultFilters } from "@/lib/filters";
 import courtsData from "@/data/courts.json";
 import CourtList from "@/components/CourtList";
 import SearchFilter from "@/components/SearchFilter";
@@ -13,30 +15,9 @@ const CourtMap = dynamic(() => import("@/components/CourtMap"), { ssr: false });
 
 type ViewMode = "list" | "map" | "both";
 
-const FAVORITES_KEY = "pickleball-favorites";
-
-const defaultFilters: FilterState = {
-  search: "",
-  typeFilter: "all",
-  areaFilter: "all",
-  surfaceFilter: "all",
-  showFavoritesOnly: false,
-  openNow: false,
-  minCourts: 0,
-};
-
-function loadFavorites(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const stored = localStorage.getItem(FAVORITES_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
-}
+const courts: Court[] = courtsData as Court[];
 
 export default function DashboardPage() {
-  const courts: Court[] = courtsData;
   const [view, setView] = useState<ViewMode>("both");
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -113,7 +94,7 @@ export default function DashboardPage() {
         if (filters.showFavoritesOnly && !favorites.includes(court.id)) return false;
         if (filters.openNow) {
           const open = isCurrentlyOpen(court.hours);
-          if (!open) return false;
+          if (open !== true) return false;
         }
         if (filters.minCourts > 0 && court.numberOfCourts < filters.minCourts) return false;
         return true;
@@ -143,7 +124,7 @@ export default function DashboardPage() {
       const next = prev.includes(courtId)
         ? prev.filter((id) => id !== courtId)
         : [...prev, courtId];
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
+      saveFavorites(next);
       return next;
     });
   }
@@ -175,10 +156,11 @@ export default function DashboardPage() {
           <button
             key={btn.key}
             onClick={() => setView(btn.key)}
+            aria-pressed={view === btn.key}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               view === btn.key
                 ? "bg-emerald-600 text-white"
-                : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                : "bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700"
             }`}
           >
             {btn.label}

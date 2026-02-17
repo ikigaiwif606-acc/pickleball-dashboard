@@ -2,11 +2,35 @@ import { Review } from "./types";
 
 const REVIEWS_KEY = "pickleball-reviews";
 
+function isValidReview(obj: unknown): obj is Review {
+  if (typeof obj !== "object" || obj === null) return false;
+  const r = obj as Record<string, unknown>;
+  return (
+    typeof r.id === "string" &&
+    typeof r.courtId === "string" &&
+    typeof r.author === "string" &&
+    typeof r.rating === "number" &&
+    r.rating >= 1 &&
+    r.rating <= 5 &&
+    typeof r.comment === "string" &&
+    typeof r.createdAt === "string"
+  );
+}
+
 function loadAllReviews(): Record<string, Review[]> {
   if (typeof window === "undefined") return {};
   try {
     const stored = localStorage.getItem(REVIEWS_KEY);
-    return stored ? JSON.parse(stored) : {};
+    if (!stored) return {};
+    const parsed = JSON.parse(stored);
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) return {};
+    const result: Record<string, Review[]> = {};
+    for (const [courtId, reviews] of Object.entries(parsed)) {
+      if (!Array.isArray(reviews)) continue;
+      const valid = reviews.filter(isValidReview);
+      if (valid.length > 0) result[courtId] = valid;
+    }
+    return result;
   } catch {
     return {};
   }

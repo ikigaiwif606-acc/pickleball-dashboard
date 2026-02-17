@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow, Circle } from "@react-google-maps/api";
 import { CourtWithDistance } from "@/lib/types";
 
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
 
 const mapContainerStyle = {
   width: "100%",
@@ -29,6 +29,7 @@ export default function CourtMap({ courts, favorites, onToggleFavorite, userLoca
 
   const [selectedCourt, setSelectedCourt] = useState<CourtWithDistance | null>(null);
   const [isOffline, setIsOffline] = useState(false);
+  const mapRef = useRef<google.maps.Map | null>(null);
 
   useEffect(() => {
     setIsOffline(!navigator.onLine);
@@ -42,22 +43,24 @@ export default function CourtMap({ courts, favorites, onToggleFavorite, userLoca
     };
   }, []);
 
-  const onLoad = useCallback(
-    (map: google.maps.Map) => {
-      if (courts.length === 0) return;
-      const bounds = new google.maps.LatLngBounds();
-      courts.forEach((c) => bounds.extend({ lat: c.coordinates.lat, lng: c.coordinates.lng }));
-      if (userLocation) {
-        bounds.extend(userLocation);
-      }
-      map.fitBounds(bounds, 50);
-    },
-    [courts, userLocation]
-  );
+  const onLoad = useCallback((map: google.maps.Map) => {
+    mapRef.current = map;
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || courts.length === 0) return;
+    const bounds = new google.maps.LatLngBounds();
+    courts.forEach((c) => bounds.extend({ lat: c.coordinates.lat, lng: c.coordinates.lng }));
+    if (userLocation) {
+      bounds.extend(userLocation);
+    }
+    map.fitBounds(bounds, 50);
+  }, [courts, userLocation]);
 
   if (isOffline) {
     return (
-      <div className="h-full w-full rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+      <div className="h-full w-full rounded-lg bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-400 dark:text-gray-500">
         <div className="text-center">
           <p className="text-lg mb-1">Map unavailable offline</p>
           <p className="text-sm">Connect to the internet to view the map.</p>
@@ -68,7 +71,7 @@ export default function CourtMap({ courts, favorites, onToggleFavorite, userLoca
 
   if (!isLoaded) {
     return (
-      <div className="h-full w-full rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+      <div className="h-full w-full rounded-lg bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-400 dark:text-gray-500">
         Loading map...
       </div>
     );
@@ -141,6 +144,7 @@ export default function CourtMap({ courts, favorites, onToggleFavorite, userLoca
               <strong className="text-sm">{selectedCourt.name}</strong>
               <button
                 onClick={() => onToggleFavorite(selectedCourt.id)}
+                aria-label={favorites.includes(selectedCourt.id) ? "Remove from favorites" : "Add to favorites"}
                 className="text-lg ml-2"
               >
                 {favorites.includes(selectedCourt.id) ? "♥" : "♡"}

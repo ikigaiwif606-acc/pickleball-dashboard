@@ -14,7 +14,7 @@ interface CourtListProps {
 export default function CourtList({ courts, favorites, onToggleFavorite, compact, ratings }: CourtListProps) {
   if (courts.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-gray-500 dark:text-gray-400">
         <p className="text-lg">No courts found matching your filters.</p>
         <p className="text-sm mt-1">Try adjusting your search or filter criteria.</p>
       </div>

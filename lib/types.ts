@@ -13,6 +13,8 @@ export interface Court {
   surfaceType: string;
   contact: string;
   description: string;
+  image: string;
+  bookingUrl: string | null;
 }
 
 export interface CourtWithDistance extends Court {

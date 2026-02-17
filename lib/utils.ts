@@ -47,5 +47,11 @@ export function isCurrentlyOpen(hours: string): boolean | null {
   if (closeP.toUpperCase() === "AM" && closeHour === 12) closeHour = 0;
   const closeMinutes = closeHour * 60 + parseInt(closeM);
 
-  return currentMinutes >= openMinutes && currentMinutes < closeMinutes;
+  if (closeMinutes > openMinutes) {
+    // Normal hours (e.g. 8:00 AM - 10:00 PM)
+    return currentMinutes >= openMinutes && currentMinutes < closeMinutes;
+  } else {
+    // Overnight hours (e.g. 10:00 PM - 2:00 AM)
+    return currentMinutes >= openMinutes || currentMinutes < closeMinutes;
+  }
 }
