@@ -16,6 +16,8 @@ const CourtMap = dynamic(() => import("@/components/CourtMap"), { ssr: false });
 type ViewMode = "list" | "map" | "both";
 
 const courts: Court[] = courtsData as Court[];
+const areas = [...new Set(courts.map((c) => c.area))].sort();
+const surfaceTypes = [...new Set(courts.map((c) => c.surfaceType))].sort();
 
 export default function DashboardPage() {
   const [view, setView] = useState<ViewMode>("both");
@@ -71,16 +73,6 @@ export default function DashboardPage() {
     );
   }, []);
 
-  const areas = useMemo(
-    () => [...new Set(courts.map((c) => c.area))].sort(),
-    [courts]
-  );
-
-  const surfaceTypes = useMemo(
-    () => [...new Set(courts.map((c) => c.surfaceType))].sort(),
-    [courts]
-  );
-
   const filteredCourts: CourtWithDistance[] = useMemo(() => {
     let result: CourtWithDistance[] = courts
       .filter((court) => {
@@ -117,7 +109,7 @@ export default function DashboardPage() {
     }
 
     return result;
-  }, [courts, filters, favorites, userLocation, sortByDistance]);
+  }, [filters, favorites, userLocation, sortByDistance]);
 
   function toggleFavorite(courtId: string) {
     setFavorites((prev) => {
@@ -151,7 +143,7 @@ export default function DashboardPage() {
         onSortByDistanceChange={setSortByDistance}
       />
 
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex flex-wrap items-center gap-2 mb-4">
         {viewButtons.map((btn) => (
           <button
             key={btn.key}

@@ -31,6 +31,7 @@ export default function CourtCard({ court, isFavorite, onToggleFavorite, average
           fill
           className="object-cover rounded-t-lg"
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          loading="lazy"
         />
       </div>
       <div className="p-5">
@@ -70,7 +71,7 @@ export default function CourtCard({ court, isFavorite, onToggleFavorite, average
           />
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{court.address}</p>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{court.description}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{court.description}</p>
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="flex items-center gap-1.5">
             <span className="text-gray-400">🕐</span>

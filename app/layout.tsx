@@ -5,6 +5,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://pickleball-dashboard.vercel.app"),
   title: "Penang Pickleball Courts",
   description: "Find pickleball courts in Penang, Malaysia",
   manifest: "/manifest.json",
@@ -12,6 +13,19 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: "PB Courts",
+  },
+  openGraph: {
+    title: "Penang Pickleball Courts",
+    description: "Find pickleball courts in Penang, Malaysia",
+    url: "https://pickleball-dashboard.vercel.app",
+    siteName: "Penang Pickleball Courts",
+    locale: "en_MY",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Penang Pickleball Courts",
+    description: "Find pickleball courts in Penang, Malaysia",
   },
 };
 

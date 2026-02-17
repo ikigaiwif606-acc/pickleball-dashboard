@@ -30,6 +30,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
           required
+          maxLength={60}
           className="flex-1 px-3 py-2 border border-gray-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-700 dark:text-gray-200 dark:placeholder-gray-400"
         />
         <div className="flex items-center gap-2">
@@ -42,6 +43,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         rows={2}
+        maxLength={500}
         className="w-full px-3 py-2 border border-gray-200 dark:border-slate-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent mb-3 resize-none bg-white dark:bg-slate-700 dark:text-gray-200 dark:placeholder-gray-400"
       />
       <button

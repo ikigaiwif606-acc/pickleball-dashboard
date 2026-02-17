@@ -134,10 +134,12 @@ export default function CourtDetailClient({ court }: { court: Court }) {
               <p className="text-xs text-gray-500 dark:text-gray-400">Surface</p>
               <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mt-1">{court.surfaceType}</p>
             </div>
-            <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3 text-center">
-              <p className="text-xs text-gray-500 dark:text-gray-400">Contact</p>
-              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mt-1">{court.contact || "N/A"}</p>
-            </div>
+            {court.contact && (
+              <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3 text-center">
+                <p className="text-xs text-gray-500 dark:text-gray-400">Contact</p>
+                <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mt-1">{court.contact}</p>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-3 mb-6">
@@ -173,7 +175,7 @@ export default function CourtDetailClient({ court }: { court: Court }) {
               Share
             </button>
             {shareMessage && (
-              <span className="self-center text-sm text-emerald-600 dark:text-emerald-400">{shareMessage}</span>
+              <span className={`self-center text-sm ${shareMessage === "Link copied!" ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>{shareMessage}</span>
             )}
           </div>
 

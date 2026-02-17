@@ -15,6 +15,17 @@ export function generateMetadata({ params }: { params: { id: string } }) {
   return {
     title: `${court.name} | Penang Pickleball Courts`,
     description: court.description,
+    openGraph: {
+      title: `${court.name} | Penang Pickleball Courts`,
+      description: court.description,
+      images: [{ url: court.image }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${court.name} | Penang Pickleball Courts`,
+      description: court.description,
+      images: [court.image],
+    },
   };
 }
 
