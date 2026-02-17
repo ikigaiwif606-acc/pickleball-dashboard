@@ -1,16 +1,17 @@
 "use client";
 
-import { Court } from "@/lib/types";
+import { CourtWithDistance } from "@/lib/types";
 import CourtCard from "./CourtCard";
 
 interface CourtListProps {
-  courts: Court[];
+  courts: CourtWithDistance[];
   favorites: string[];
   onToggleFavorite: (courtId: string) => void;
   compact?: boolean;
+  ratings?: Record<string, { average: number; count: number }>;
 }
 
-export default function CourtList({ courts, favorites, onToggleFavorite, compact }: CourtListProps) {
+export default function CourtList({ courts, favorites, onToggleFavorite, compact, ratings }: CourtListProps) {
   if (courts.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">
@@ -23,7 +24,7 @@ export default function CourtList({ courts, favorites, onToggleFavorite, compact
   return (
     <div className={
       compact
-        ? "flex flex-col gap-4 overflow-y-auto max-h-[600px] pr-2"
+        ? "flex flex-col gap-4 overflow-y-auto max-h-[50vh] lg:max-h-[calc(100vh-10rem)] pr-2"
         : "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
     }>
       {courts.map((court) => (
@@ -32,6 +33,8 @@ export default function CourtList({ courts, favorites, onToggleFavorite, compact
           court={court}
           isFavorite={favorites.includes(court.id)}
           onToggleFavorite={onToggleFavorite}
+          averageRating={ratings?.[court.id]?.average}
+          reviewCount={ratings?.[court.id]?.count}
         />
       ))}
     </div>
