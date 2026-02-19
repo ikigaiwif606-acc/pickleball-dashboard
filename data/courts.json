@@ -2,11 +2,11 @@
   {
     "id": "1",
     "name": "Pickle By The Sea",
-    "address": "Gurney Drive, 10250 George Town, Penang",
+    "address": "Lot PT 844 & PT 845, Gurney Drive, Bandar Tanjong, 10250 George Town, Penang",
     "area": "Gurney",
     "coordinates": {
-      "lat": 5.437,
-      "lng": 100.31
+      "lat": 5.4400,
+      "lng": 100.3102
     },
     "hours": "7:00 AM – 11:00 PM",
     "numberOfCourts": 16,
@@ -21,11 +21,11 @@
   {
     "id": "2",
     "name": "G.O.A.T Pickle Club",
-    "address": "Jelutong, 11600 Penang",
+    "address": "341, Jalan Jeti Jelutong, Jelutong, 11600 Penang",
     "area": "Jelutong",
     "coordinates": {
-      "lat": 5.388,
-      "lng": 100.323
+      "lat": 5.3959,
+      "lng": 100.3191
     },
     "hours": "8:00 AM – 11:00 PM",
     "numberOfCourts": 12,
@@ -40,11 +40,11 @@
   {
     "id": "3",
     "name": "Spin & Smash Pickleball Hub",
-    "address": "George Town, 10200 Penang",
+    "address": "Lot 188, Jalan Burma, Pulau Tikus, 10350 George Town, Penang",
     "area": "George Town",
     "coordinates": {
-      "lat": 5.4145,
-      "lng": 100.329
+      "lat": 5.4274,
+      "lng": 100.3165
     },
     "hours": "7:00 AM – 10:00 PM",
     "numberOfCourts": 10,
@@ -59,11 +59,11 @@
   {
     "id": "4",
     "name": "Pickle Land",
-    "address": "Bayan Baru, 11950 Penang",
+    "address": "Lot No. C1, C2 & C3, D'Piazza Mall, Jalan Mahsuri, Bayan Baru, 11900 Penang",
     "area": "Bayan Baru",
     "coordinates": {
-      "lat": 5.331,
-      "lng": 100.28
+      "lat": 5.3267,
+      "lng": 100.2834
     },
     "hours": "8:00 AM – 11:00 PM",
     "numberOfCourts": 9,
@@ -78,11 +78,11 @@
   {
     "id": "5",
     "name": "Heritage Courts",
-    "address": "George Town, 10300 Penang",
+    "address": "457, Jalan Burma, Pulau Tikus, 10350 George Town, Penang",
     "area": "George Town",
     "coordinates": {
-      "lat": 5.418,
-      "lng": 100.335
+      "lat": 5.4321,
+      "lng": 100.3123
     },
     "hours": "7:00 AM – 10:00 PM",
     "numberOfCourts": 8,
@@ -97,11 +97,11 @@
   {
     "id": "6",
     "name": "Pickle Lab",
-    "address": "Jelutong, 11600 Penang",
+    "address": "244P, Jelutong Barat, Taman Ara, Gembira Parade, 11600 George Town, Penang",
     "area": "Jelutong",
     "coordinates": {
-      "lat": 5.386,
-      "lng": 100.318
+      "lat": 5.3867,
+      "lng": 100.3037
     },
     "hours": "9:00 AM – 10:00 PM",
     "numberOfCourts": 6,
@@ -116,11 +116,11 @@
   {
     "id": "7",
     "name": "PickleGen",
-    "address": "Bayan Baru, 11950 Penang",
+    "address": "78, Lintang Bayan, Giant Bayan Baru, 11900 Bayan Lepas, Penang",
     "area": "Bayan Baru",
     "coordinates": {
-      "lat": 5.328,
-      "lng": 100.285
+      "lat": 5.3211,
+      "lng": 100.2839
     },
     "hours": "8:00 AM – 10:00 PM",
     "numberOfCourts": 7,
@@ -135,11 +135,11 @@
   {
     "id": "8",
     "name": "PickleSquad",
-    "address": "Butterworth, 12300 Penang",
+    "address": "5129 Jalan Siram, Kampung Siram, 12100 Butterworth, Penang",
     "area": "Butterworth",
     "coordinates": {
-      "lat": 5.399,
-      "lng": 100.364
+      "lat": 5.4113,
+      "lng": 100.3785
     },
     "hours": "7:00 AM – 10:00 PM",
     "numberOfCourts": 8,
@@ -154,11 +154,11 @@
   {
     "id": "9",
     "name": "Penang Pickleball Club",
-    "address": "Bukit Mertajam, 14000 Penang",
+    "address": "PT815, Jalan Bukit Tambun, Juru, 14000 Bukit Mertajam, Penang",
     "area": "Bukit Mertajam",
     "coordinates": {
-      "lat": 5.363,
-      "lng": 100.46
+      "lat": 5.2936,
+      "lng": 100.4236
     },
     "hours": "8:00 AM – 10:00 PM",
     "numberOfCourts": 6,
@@ -173,11 +173,11 @@
   {
     "id": "10",
     "name": "Picklemotion",
-    "address": "Gurney Drive, 10250 George Town, Penang",
+    "address": "163D, Persiaran Gurney, Gurney Paragon Mall, 10250 George Town, Penang",
     "area": "Gurney",
     "coordinates": {
-      "lat": 5.435,
-      "lng": 100.312
+      "lat": 5.4358,
+      "lng": 100.3112
     },
     "hours": "7:00 AM – 10:00 PM",
     "numberOfCourts": 4,
@@ -192,11 +192,11 @@
   {
     "id": "11",
     "name": "Play! Tennis Malaysia",
-    "address": "George Town, 10450 Penang",
+    "address": "203, Jalan Burma, George Town, 10350 Penang",
     "area": "George Town",
     "coordinates": {
-      "lat": 5.426,
-      "lng": 100.316
+      "lat": 5.4270,
+      "lng": 100.3148
     },
     "hours": "8:00 AM – 10:00 PM",
     "numberOfCourts": 3,
@@ -211,11 +211,11 @@
   {
     "id": "12",
     "name": "PickleSky Penang",
-    "address": "Bayan Lepas, 11900 Penang",
-    "area": "Bayan Lepas",
+    "address": "Lot No. 2-1A, Sunshine Mall, Sunshine Central, Jalan Thean Tek, 11500 Ayer Itam, Penang",
+    "area": "Ayer Itam",
     "coordinates": {
-      "lat": 5.32,
-      "lng": 100.278
+      "lat": 5.3985,
+      "lng": 100.2869
     },
     "hours": "9:00 AM – 11:00 PM",
     "numberOfCourts": 6,
