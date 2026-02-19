@@ -95,17 +95,7 @@ export default function CourtCard({ court, isFavorite, onToggleFavorite, average
             <span className="text-gray-500 dark:text-gray-400">📞 {court.contact}</span>
           )}
           <div className="flex items-center gap-3 ml-auto">
-            {court.bookingUrl && (
-              <a
-                href={court.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
-              >
-                Book Now
-              </a>
-            )}
-            <a
+<a
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"

@@ -151,16 +151,6 @@ export default function CourtDetailClient({ court }: { court: Court }) {
             >
               Get Directions →
             </a>
-            {court.bookingUrl && (
-              <a
-                href={court.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-              >
-                Book Court
-              </a>
-            )}
             <button
               onClick={handleShare}
               className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-sm font-medium"
