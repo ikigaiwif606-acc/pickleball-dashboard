@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CourtWithDistance } from "@/lib/types";
 import { isCurrentlyOpen } from "@/lib/utils";
+import Badge from "./Badge";
 import FavoriteButton from "./FavoriteButton";
 
 interface CourtCardProps {
@@ -42,25 +43,19 @@ export default function CourtCard({ court, isFavorite, onToggleFavorite, average
             </Link>
             <div className="flex items-center gap-2 mt-1 flex-wrap">
               {open !== null && (
-                <span
-                  className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${
-                    open
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400"
-                      : "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400"
-                  }`}
-                >
+                <Badge variant={open ? "success" : "danger"}>
                   {open ? "Open Now" : "Closed"}
-                </span>
+                </Badge>
               )}
               {court.distance != null && (
-                <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
+                <Badge variant="info">
                   {court.distance.toFixed(1)} km away
-                </span>
+                </Badge>
               )}
               {averageRating != null && reviewCount != null && reviewCount > 0 && (
-                <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400">
+                <Badge variant="warning">
                   {"★"} {averageRating.toFixed(1)} ({reviewCount})
-                </span>
+                </Badge>
               )}
             </div>
           </div>

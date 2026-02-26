@@ -45,7 +45,8 @@ export function isCurrentlyOpen(hours: string): boolean | null {
   let closeHour = parseInt(closeH);
   if (closeP.toUpperCase() === "PM" && closeHour !== 12) closeHour += 12;
   if (closeP.toUpperCase() === "AM" && closeHour === 12) closeHour = 0;
-  const closeMinutes = closeHour * 60 + parseInt(closeM);
+  let closeMinutes = closeHour * 60 + parseInt(closeM);
+  if (closeMinutes === 0) closeMinutes = 1440; // Treat midnight close as end-of-day
 
   if (closeMinutes > openMinutes) {
     // Normal hours (e.g. 8:00 AM - 10:00 PM)

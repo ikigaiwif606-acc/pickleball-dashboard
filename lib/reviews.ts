@@ -52,7 +52,7 @@ export function getAllReviews(): Record<string, Review[]> {
 export function addReview(courtId: string, author: string, rating: number, comment: string): Review {
   const all = loadAllReviews();
   const review: Review = {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    id: crypto.randomUUID(),
     courtId,
     author,
     rating: Math.min(5, Math.max(1, Math.round(rating))),

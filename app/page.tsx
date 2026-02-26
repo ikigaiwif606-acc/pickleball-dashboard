@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Court, CourtWithDistance, FilterState } from "@/lib/types";
-import { haversineDistance, isCurrentlyOpen } from "@/lib/utils";
+import { Court, FilterState } from "@/lib/types";
+import { filterCourts } from "@/lib/filterCourts";
 import { getAllReviews } from "@/lib/reviews";
-import { loadFavorites, saveFavorites } from "@/lib/favorites";
+import { useFavorites } from "@/lib/useFavorites";
 import { defaultFilters } from "@/lib/filters";
 import courtsData from "@/data/courts.json";
 import CourtList from "@/components/CourtList";
 import SearchFilter from "@/components/SearchFilter";
+import GoogleMapsProvider from "@/components/GoogleMapsProvider";
 
 const CourtMap = dynamic(() => import("@/components/CourtMap"), { ssr: false });
 
@@ -22,7 +23,7 @@ const surfaceTypes = [...new Set(courts.map((c) => c.surfaceType))].sort();
 export default function DashboardPage() {
   const [view, setView] = useState<ViewMode>("both");
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const { favorites, toggleFavorite } = useFavorites();
   const [ratings, setRatings] = useState<Record<string, { average: number; count: number }>>({});
 
   // Geolocation state
@@ -31,9 +32,7 @@ export default function DashboardPage() {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [sortByDistance, setSortByDistance] = useState(false);
 
-  useEffect(() => {
-    setFavorites(loadFavorites());
-    // Compute ratings from all reviews
+  const computeRatings = useCallback(() => {
     const allReviews = getAllReviews();
     const ratingsMap: Record<string, { average: number; count: number }> = {};
     for (const [courtId, courtReviews] of Object.entries(allReviews)) {
@@ -47,6 +46,21 @@ export default function DashboardPage() {
     }
     setRatings(ratingsMap);
   }, []);
+
+  useEffect(() => {
+    computeRatings();
+  }, [computeRatings]);
+
+  // Re-compute ratings when returning from detail page
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        computeRatings();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [computeRatings]);
 
   const requestLocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -73,53 +87,17 @@ export default function DashboardPage() {
     );
   }, []);
 
-  const filteredCourts: CourtWithDistance[] = useMemo(() => {
-    let result: CourtWithDistance[] = courts
-      .filter((court) => {
-        if (filters.search && !court.name.toLowerCase().includes(filters.search.toLowerCase())) {
-          return false;
-        }
-        if (filters.typeFilter === "indoor" && !court.indoor) return false;
-        if (filters.typeFilter === "outdoor" && court.indoor) return false;
-        if (filters.areaFilter !== "all" && court.area !== filters.areaFilter) return false;
-        if (filters.surfaceFilter !== "all" && court.surfaceType !== filters.surfaceFilter) return false;
-        if (filters.showFavoritesOnly && !favorites.includes(court.id)) return false;
-        if (filters.openNow) {
-          const open = isCurrentlyOpen(court.hours);
-          if (open !== true) return false;
-        }
-        if (filters.minCourts > 0 && court.numberOfCourts < filters.minCourts) return false;
-        return true;
-      })
-      .map((court) => {
-        if (!userLocation) return court;
-        return {
-          ...court,
-          distance: haversineDistance(
-            userLocation.lat,
-            userLocation.lng,
-            court.coordinates.lat,
-            court.coordinates.lng
-          ),
-        };
-      });
-
-    if (sortByDistance && userLocation) {
-      result.sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
-    }
-
-    return result;
+  const filteredCourts = useMemo(() => {
+    return filterCourts({ courts, filters, favorites, userLocation, sortByDistance });
   }, [filters, favorites, userLocation, sortByDistance]);
 
-  function toggleFavorite(courtId: string) {
-    setFavorites((prev) => {
-      const next = prev.includes(courtId)
-        ? prev.filter((id) => id !== courtId)
-        : [...prev, courtId];
-      saveFavorites(next);
-      return next;
-    });
-  }
+  // Debounce courts passed to the map to avoid rapid re-fits during typing
+  const [debouncedCourts, setDebouncedCourts] = useState(filteredCourts);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => {
+    debounceRef.current = setTimeout(() => setDebouncedCourts(filteredCourts), 300);
+    return () => clearTimeout(debounceRef.current);
+  }, [filteredCourts]);
 
   const viewButtons: { key: ViewMode; label: string }[] = [
     { key: "both", label: "List + Map" },
@@ -128,6 +106,7 @@ export default function DashboardPage() {
   ];
 
   return (
+    <GoogleMapsProvider>
     <div>
       <SearchFilter
         filters={filters}
@@ -174,7 +153,7 @@ export default function DashboardPage() {
           <div className="order-1 lg:order-2 lg:w-1/2 lg:sticky lg:top-24 lg:self-start">
             <div className="h-[45vh] lg:h-[calc(100vh-10rem)]">
               <CourtMap
-                courts={filteredCourts}
+                courts={debouncedCourts}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
                 userLocation={userLocation}
@@ -191,12 +170,13 @@ export default function DashboardPage() {
         />
       ) : (
         <CourtMap
-          courts={filteredCourts}
+          courts={debouncedCourts}
           favorites={favorites}
           onToggleFavorite={toggleFavorite}
           userLocation={userLocation}
         />
       )}
     </div>
+    </GoogleMapsProvider>
   );
 }

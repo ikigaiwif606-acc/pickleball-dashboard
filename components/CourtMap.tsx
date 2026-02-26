@@ -2,10 +2,10 @@
 
 import { useCallback, useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow, Circle } from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindow, Circle } from "@react-google-maps/api";
 import { CourtWithDistance } from "@/lib/types";
-
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
+import { useGoogleMaps } from "./GoogleMapsProvider";
+import FavoriteButton from "./FavoriteButton";
 
 const mapContainerStyle = {
   width: "100%",
@@ -23,9 +23,7 @@ interface CourtMapProps {
 }
 
 export default function CourtMap({ courts, favorites, onToggleFavorite, userLocation }: CourtMapProps) {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const [selectedCourt, setSelectedCourt] = useState<CourtWithDistance | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -142,13 +140,11 @@ export default function CourtMap({ courts, favorites, onToggleFavorite, userLoca
           <div className="min-w-[220px] p-1">
             <div className="flex justify-between items-center">
               <strong className="text-sm">{selectedCourt.name}</strong>
-              <button
-                onClick={() => onToggleFavorite(selectedCourt.id)}
-                aria-label={favorites.includes(selectedCourt.id) ? "Remove from favorites" : "Add to favorites"}
-                className="text-lg ml-2"
-              >
-                {favorites.includes(selectedCourt.id) ? "♥" : "♡"}
-              </button>
+              <FavoriteButton
+                courtId={selectedCourt.id}
+                isFavorite={favorites.includes(selectedCourt.id)}
+                onToggle={onToggleFavorite}
+              />
             </div>
             <p className="text-xs text-gray-500 mt-1">{selectedCourt.address}</p>
             <div className="text-xs mt-2 space-y-0.5">

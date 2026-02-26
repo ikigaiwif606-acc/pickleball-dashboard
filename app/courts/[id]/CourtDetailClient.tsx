@@ -6,17 +6,19 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { Court } from "@/lib/types";
 import { isCurrentlyOpen } from "@/lib/utils";
-import { loadFavorites, saveFavorites } from "@/lib/favorites";
+import { useFavorites } from "@/lib/useFavorites";
+import Badge from "@/components/Badge";
 import FavoriteButton from "@/components/FavoriteButton";
 import ReviewForm from "@/components/ReviewForm";
 import ReviewList from "@/components/ReviewList";
+import GoogleMapsProvider from "@/components/GoogleMapsProvider";
 import { getReviews, addReview, deleteReview, getAverageRating } from "@/lib/reviews";
 import type { Review } from "@/lib/types";
 
 const CourtMap = dynamic(() => import("@/components/CourtMap"), { ssr: false });
 
 export default function CourtDetailClient({ court }: { court: Court }) {
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const { favorites, toggleFavorite } = useFavorites();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [shareMessage, setShareMessage] = useState("");
   const open = isCurrentlyOpen(court.hours);
@@ -24,19 +26,8 @@ export default function CourtDetailClient({ court }: { court: Court }) {
   const avgRating = getAverageRating(reviews);
 
   useEffect(() => {
-    setFavorites(loadFavorites());
     setReviews(getReviews(court.id));
   }, [court.id]);
-
-  function toggleFavorite(courtId: string) {
-    setFavorites((prev) => {
-      const next = prev.includes(courtId)
-        ? prev.filter((id) => id !== courtId)
-        : [...prev, courtId];
-      saveFavorites(next);
-      return next;
-    });
-  }
 
   function handleAddReview(author: string, rating: number, comment: string) {
     addReview(court.id, author, rating, comment);
@@ -71,6 +62,7 @@ export default function CourtDetailClient({ court }: { court: Court }) {
   }
 
   return (
+    <GoogleMapsProvider>
     <div>
       <Link href="/" className="inline-flex items-center text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 mb-4">
         ← Back to all courts
@@ -94,21 +86,17 @@ export default function CourtDetailClient({ court }: { court: Court }) {
               <p className="text-gray-500 dark:text-gray-400 mt-1">{court.address}</p>
               <div className="flex items-center gap-2 mt-2 flex-wrap">
                 {open !== null && (
-                  <span
-                    className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${
-                      open ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400" : "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400"
-                    }`}
-                  >
+                  <Badge variant={open ? "success" : "danger"}>
                     {open ? "Open Now" : "Closed"}
-                  </span>
+                  </Badge>
                 )}
-                <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${court.indoor ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400" : "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400"}`}>
+                <Badge variant={court.indoor ? "info" : "success"}>
                   {court.indoor ? "Indoor" : "Outdoor"}
-                </span>
+                </Badge>
                 {avgRating !== null && (
-                  <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400">
+                  <Badge variant="warning">
                     {"★"} {avgRating.toFixed(1)} ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
-                  </span>
+                  </Badge>
                 )}
               </div>
             </div>
@@ -187,5 +175,6 @@ export default function CourtDetailClient({ court }: { court: Court }) {
         <ReviewList reviews={reviews} onDelete={handleDeleteReview} />
       </div>
     </div>
+    </GoogleMapsProvider>
   );
 }
